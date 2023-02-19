@@ -14,6 +14,7 @@ Tetris::Tetris()
 }
 
 void Tetris::init_() {
+    srand((unsigned int)time(NULL));
     for (int i = 0; i < FIELD_HEIGHT; i++) {
         for (int j = 0; j < FIELD_WIDTH; j++) {
             field_[i][j] = 0;
@@ -225,9 +226,23 @@ void Tetris::check_keyboard() {
 void Tetris::display_() {
     memcpy(buffer_, field_, sizeof(field_));
 
+    int bottom_y = 0;
+
+    // ミノの到着地点を探索
+    for (int i = mino_y_; i < FIELD_HEIGHT; i++) {
+        if (check_hit_(mino_x_, i + 1, mino_type_, mino_angle_)) {
+            bottom_y = i;
+            break;
+        }
+    }
+
     for (int i = 0; i < MINO_HEIGHT; i++) {
         for (int j = 0; j < MINO_WIDTH; j++) {
             buffer_[mino_y_ + i][mino_x_ + j] |= mino_[mino_type_].mino_shapes[mino_angle_][i][j];
+            buffer_[bottom_y + i][mino_x_ + j] |= mino_[mino_type_].mino_shapes[mino_angle_][i][j];
+            if ((mino_[mino_type_].mino_shapes[mino_angle_][i][j] == 1) && (mino_y_ != bottom_y)) {
+                buffer_[bottom_y + i][mino_x_ + j] += 1; // ミノの到着地点は2（実際のミノとかぶらないようにする）
+            }
         }
     }
 
@@ -235,8 +250,10 @@ void Tetris::display_() {
 
     for (int i = 0; i < FIELD_HEIGHT; i++) {
         for (int j = 0; j < FIELD_WIDTH; j++) {
-            if (1 == buffer_[i][j]) {
+            if (buffer_[i][j] == 1) {
                 std::cout << " ■";
+            } else if (buffer_[i][j] == 2) {
+                std::cout << " □"; // ミノの到着地点
             } else {
                 std::cout << "　";
             }
