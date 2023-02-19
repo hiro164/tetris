@@ -6,8 +6,8 @@
 
 using namespace std;
 
-#define FIELD_WIDTH 12
 #define FIELD_HEIGHT 22
+#define FIELD_WIDTH 12
 
 enum {
     MINO_TYPE_I,
@@ -32,14 +32,14 @@ private:
     int mino_angle_;
 
     void init_();
-    void set_field_(); // フィールド初期化
-    void set_mino_();  // ミノ用意
+    void set_field_();                                                              // フィールド初期化
+    void set_mino_();                                                               // ミノ用意
+    void spawn_mino_();                                                             // ミノをスポーン
+    bool check_hit_(int argMinoX, int argMinoY, int argMinoType, int argMinoAngle); // 当たり判定
+    void display_();                                                                // 表示
 
 public:
     Tetris();
-    void spawn_mino();                                                             // ミノをスポーン
-    void check_keyboard();                                                         // もし、キーボードが操作されたらミノを動かす
-    bool check_hit(int argMinoX, int argMinoY, int argMinoType, int argMinoAngle); // 当たり判定
-    void check_erase();                                                            // 消す判定
-    void display();                                                                // 表示
+    void check_keyboard(); // もし、キーボードが操作されたらミノを動かす
+    void check_erase();    // 消す判定
 };

@@ -10,5 +10,5 @@ enum {
 };
 
 struct Mino {
-    char mino_shapes_[MINO_ANGLE_MAX][MINO_WIDTH][MINO_HEIGHT];
+    char mino_shapes[MINO_ANGLE_MAX][MINO_WIDTH][MINO_HEIGHT];
 };

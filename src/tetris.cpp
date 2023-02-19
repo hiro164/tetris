@@ -10,7 +10,7 @@ Tetris::Tetris()
     init_();
     set_field_();
     set_mino_();
-    spawn_mino();
+    spawn_mino_();
 }
 
 void Tetris::init_() {
@@ -176,17 +176,17 @@ void Tetris::set_mino_() {
                             0, 0, 0, 0}}};
 }
 
-void Tetris::spawn_mino() {
+void Tetris::spawn_mino_() {
     mino_x_ = 5;
     mino_y_ = 0;
     mino_type_ = rand() % MINO_TYPE_MAX;
     mino_angle_ = rand() % MINO_ANGLE_MAX;
 }
 
-bool Tetris::check_hit(int argMinoX, int argMinoY, int argMinoType, int argMinoAngle) {
+bool Tetris::check_hit_(int argMinoX, int argMinoY, int argMinoType, int argMinoAngle) {
     for (int i = 0; i < MINO_HEIGHT; i++) {
         for (int j = 0; j < MINO_WIDTH; j++) {
-            if (mino_[argMinoType].mino_shapes_[argMinoAngle][i][j] && field_[argMinoY + i][argMinoX + j]) {
+            if (mino_[argMinoType].mino_shapes[argMinoAngle][i][j] && field_[argMinoY + i][argMinoX + j]) {
                 return true;
             }
         }
@@ -198,41 +198,39 @@ void Tetris::check_keyboard() {
     if (kbhit()) {
         switch (getch()) {
         case 's':
-            if (!check_hit(mino_x_, mino_y_ + 1, mino_type_, mino_angle_)) {
+            if (!check_hit_(mino_x_, mino_y_ + 1, mino_type_, mino_angle_)) {
                 ++mino_y_;
             }
             break;
         case 'a':
-            if (!check_hit(mino_x_ - 1, mino_y_, mino_type_, mino_angle_)) {
+            if (!check_hit_(mino_x_ - 1, mino_y_, mino_type_, mino_angle_)) {
                 --mino_x_;
             }
             break;
         case 'd':
-            if (!check_hit(mino_x_ + 1, mino_y_, mino_type_, mino_angle_)) {
+            if (!check_hit_(mino_x_ + 1, mino_y_, mino_type_, mino_angle_)) {
                 ++mino_x_;
             }
             break;
         case 'w':
-            if (!check_hit(mino_x_, mino_y_, mino_type_, (mino_angle_ + 1) % MINO_ANGLE_MAX)) {
+            if (!check_hit_(mino_x_, mino_y_, mino_type_, (mino_angle_ + 1) % MINO_ANGLE_MAX)) {
                 mino_angle_ = (mino_angle_ + 1) % MINO_ANGLE_MAX;
             }
             break;
         }
-        display();
+        display_();
     }
 }
 
-void Tetris::display() {
-    // write displayBuffer
+void Tetris::display_() {
     memcpy(buffer_, field_, sizeof(field_));
 
-    for (int i = 0; i < MINO_HEIGHT; ++i) {
-        for (int j = 0; j < MINO_WIDTH; ++j) {
-            buffer_[mino_y_ + i][mino_x_ + j] |= mino_[mino_type_].mino_shapes_[mino_angle_][i][j];
+    for (int i = 0; i < MINO_HEIGHT; i++) {
+        for (int j = 0; j < MINO_WIDTH; j++) {
+            buffer_[mino_y_ + i][mino_x_ + j] |= mino_[mino_type_].mino_shapes[mino_angle_][i][j];
         }
     }
 
-    // display block on console
     system("clear");
 
     for (int i = 0; i < FIELD_HEIGHT; i++) {
@@ -251,10 +249,10 @@ void Tetris::check_erase() {
     if (time(NULL) != time_) {
         time_ = time(NULL);
 
-        if (check_hit(mino_x_, mino_y_ + 1, mino_type_, mino_angle_)) {
+        if (check_hit_(mino_x_, mino_y_ + 1, mino_type_, mino_angle_)) {
             for (int i = 0; i < MINO_HEIGHT; i++) {
                 for (int j = 0; j < MINO_WIDTH; j++) {
-                    field_[mino_y_ + i][mino_x_ + j] |= mino_[mino_type_].mino_shapes_[mino_angle_][i][j];
+                    field_[mino_y_ + i][mino_x_ + j] |= mino_[mino_type_].mino_shapes[mino_angle_][i][j];
                 }
             }
 
@@ -272,10 +270,10 @@ void Tetris::check_erase() {
                     }
                 }
             }
-            spawn_mino();
+            spawn_mino_();
         } else {
             mino_y_++;
         }
-        display();
+        display_();
     }
 }
