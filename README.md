@@ -1,4 +1,6 @@
 # コンソールゲーム　～テトリス～
+<img src="images/play.PNG" width="150">
+
 ## 実行方法
 推奨環境：Linux
 ```
@@ -9,8 +11,9 @@ make
 ## 遊び方
 - A：←
 - D：→
-- S：↓
-- W：回転
+- S：ソフトドロップ
+- w：ハードドロップ
+- Space：回転
 
 ## 参考サイト
 https://qiita.com/Chomolungma/items/52bd8b133b747cb603e7

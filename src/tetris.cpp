@@ -195,25 +195,39 @@ bool Tetris::check_hit_(int argMinoX, int argMinoY, int argMinoType, int argMino
     return false;
 }
 
+int Tetris::calc_bottom_(int argMinoX, int argMinoY, int argMinoType, int argMinoAngle) {
+    int bottom = 0;
+    for (int i = argMinoY; i < FIELD_HEIGHT; i++) {
+        if (check_hit_(argMinoX, i + 1, argMinoType, argMinoAngle)) {
+            bottom = i;
+            break;
+        }
+    }
+    return bottom;
+}
+
 void Tetris::check_keyboard() {
     if (kbhit()) {
         switch (getch()) {
         case 's':
             if (!check_hit_(mino_x_, mino_y_ + 1, mino_type_, mino_angle_)) {
-                ++mino_y_;
+                mino_y_++;
             }
             break;
         case 'a':
             if (!check_hit_(mino_x_ - 1, mino_y_, mino_type_, mino_angle_)) {
-                --mino_x_;
+                mino_x_--;
             }
             break;
         case 'd':
             if (!check_hit_(mino_x_ + 1, mino_y_, mino_type_, mino_angle_)) {
-                ++mino_x_;
+                mino_x_++;
             }
             break;
         case 'w':
+            mino_y_ = calc_bottom_(mino_x_, mino_y_, mino_type_, mino_angle_);
+            break;
+        case ' ':
             if (!check_hit_(mino_x_, mino_y_, mino_type_, (mino_angle_ + 1) % MINO_ANGLE_MAX)) {
                 mino_angle_ = (mino_angle_ + 1) % MINO_ANGLE_MAX;
             }
@@ -226,15 +240,7 @@ void Tetris::check_keyboard() {
 void Tetris::display_() {
     memcpy(buffer_, field_, sizeof(field_));
 
-    int bottom_y = 0;
-
-    // ミノの到着地点を探索
-    for (int i = mino_y_; i < FIELD_HEIGHT; i++) {
-        if (check_hit_(mino_x_, i + 1, mino_type_, mino_angle_)) {
-            bottom_y = i;
-            break;
-        }
-    }
+    int bottom_y = calc_bottom_(mino_x_, mino_y_, mino_type_, mino_angle_);
 
     for (int i = 0; i < MINO_HEIGHT; i++) {
         for (int j = 0; j < MINO_WIDTH; j++) {

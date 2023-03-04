@@ -32,11 +32,12 @@ private:
     int mino_angle_;
 
     void init_();
-    void set_field_();                                                              // フィールド初期化
-    void set_mino_();                                                               // ミノ用意
-    void spawn_mino_();                                                             // ミノをスポーン
-    bool check_hit_(int argMinoX, int argMinoY, int argMinoType, int argMinoAngle); // 当たり判定
-    void display_();                                                                // 表示
+    void set_field_();                                                               // フィールド初期化
+    void set_mino_();                                                                // ミノ用意
+    void spawn_mino_();                                                              // ミノをスポーン
+    bool check_hit_(int argMinoX, int argMinoY, int argMinoType, int argMinoAngle);  // 当たり判定
+    int calc_bottom_(int argMinoX, int argMinoY, int argMinoType, int argMinoAngle); // ミノの到着地点を計算
+    void display_();                                                                 // 表示
 
 public:
     Tetris();
