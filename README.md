@@ -7,6 +7,7 @@
 mkdir build && cd build
 cmake ..
 make
+./tetris
 ```
 ## 遊び方
 - A：←
